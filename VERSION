@@ -1,3 +1,6 @@
+0.2.5 (2018.07.06):
+  - Support GHC >= 8.4
+  - Code cleanup
 0.2.4.1 (2015.04.04):
 	- Data.Trie.Internal: adjusted imports to compule under GHC 7.10.1
 0.2.4 (2014.10.09):
