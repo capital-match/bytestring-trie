@@ -38,17 +38,10 @@ import Foreign.ForeignPtr (ForeignPtr, withForeignPtr)
 import Foreign.Ptr        (Ptr, plusPtr)
 import Foreign.Storable   (Storable(..))
 
-{-
-#ifdef __USE_C_INTERNAL__
-import Foreign.C.Types (CInt)
-import Control.Monad   (liftM)
-#endif
--}
-
 ----------------------------------------------------------------
 
 -- | Associated type of 'ByteString'
-type ByteStringElem = Word8 
+type ByteStringElem = Word8
 
 
 ----------------------------------------------------------------
@@ -77,7 +70,7 @@ breakMaximalPrefix
                       else newPS s2 off2 i
             let s1' = newPS s1 (off1 + i) (len1 - i)
             let s2' = newPS s2 (off2 + i) (len2 - i)
-            
+
             return $! (,,) !$ pre !$ s1' !$ s2'
 
 -- | C-style pointer addition, without the liberal type of 'plusPtr'.
@@ -101,18 +94,6 @@ newPS s o l =
 -- | Calculates the first index where values differ.
 
 indexOfDifference :: Ptr ByteStringElem -> Ptr ByteStringElem -> Int -> IO Int
-{-
-#ifdef __USE_C_INTERNAL__
-
-indexOfDifference p q i =
-    liftM fromIntegral $! c_indexOfDifference p q (fromIntegral i)
-
--- This could probably be not IO, but the wrapper requires that anyways...
-foreign import ccall unsafe "ByteStringInternal/indexOfDifference.h indexOfDifference"
-    c_indexOfDifference :: Ptr ByteStringElem -> Ptr ByteStringElem -> CInt -> IO CInt
-
-#else
--}
 
 -- Use the naive algorithm which doesn't depend on architecture details
 indexOfDifference p1 p2 limit = goByte 0
@@ -125,9 +106,4 @@ indexOfDifference p1 p2 limit = goByte 0
                 if c1 == c2
                     then goByte $! n+1
                     else return n
-{-
-#endif
--}
 
-----------------------------------------------------------------
------------------------------------------------------------ fin.
